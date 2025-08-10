@@ -1,71 +1,85 @@
 package LAB1;
 import java.util.*;
-public class BinarySearchCode{
-    public static int BinarySearchFunction(int[] arr, int item) {     //BINARY SEARCH CODE
-                int low=0 , high = arr.length-1;
 
-                while(low<=high) {
-                   int mid=low+(high-low)/2; //
+public class BinarySearchCode {
 
-                   if(arr[mid]==item) {
-                    return mid;
-                   } else if(arr[mid]<item) {
-                    low = mid + 1;
-                   } else {
-                    high=mid-1;
-                   }
-                }
-                return -1; //ELEMENT NOT FOUND IN THE ARRAY
+    // Binary Search Logic
+    public static int performBinarySearch(int[] inputArray, int searchValue) {
+        int startIndex = 0;
+        int endIndex = inputArray.length - 1;
+
+        while (startIndex <= endIndex) {
+            int middleIndex = startIndex + (endIndex - startIndex) / 2;
+
+            if (inputArray[middleIndex] == searchValue) {
+                return middleIndex;
+            } else if (inputArray[middleIndex] < searchValue) {
+                startIndex = middleIndex + 1;
+            } else {
+                endIndex = middleIndex - 1;
+            }
+        }
+        return -1;
     }
-   public static double  MeasureExecutionTime(int[] arr, int target) {
-    long startTime = System.nanoTime();
 
-        BinarySearchFunction(arr, target);
+    // Execution Time Calculator
+    public static double getExecutionDuration(int[] testArray, int findNumber) {
+        long beginTime = System.nanoTime();
 
-        long endTime = System.nanoTime();
-        return (endTime - startTime) / 1e6;    // CONVERT TO MILISECONDS
-    
-   } 
+        performBinarySearch(testArray, findNumber);
+
+        long finishTime = System.nanoTime();
+        return (finishTime - beginTime) / 1e6; // milliseconds
+    }
+
+    // Function to Generate Sorted Random Array
+    public static int[] createRandomSortedArray(int length, int bound) {
+        Random rng = new Random();
+        int[] tempArray = new int[length];
+        for (int i = 0; i < length; i++) {
+            tempArray[i] = rng.nextInt(bound * 2) - bound; // random negative & positive
+        }
+        Arrays.sort(tempArray);
+        return tempArray;
+    }
 
     public static void main(String[] args) {
-        // TESTING OF ARRAYS
-        int[] emptyArray = {};                                 //EMPTY ARRAY
-        int[] singleElement = {5};                             //SINGLE ELEMENT
-        int[] negativeValues = {-5, -3, 0, 2, 4, 6, 8};        //NEGATIVE VALUES
-        int[] duplicates = {1, 1, 1, 1, 1, 1, 1};               //DUPLICATES
-        int[] largeArray = new int[1000];
-        for (int i = 0; i < largeArray.length; i++) {
-            largeArray[i] = i;
-        }
+        // Random Arrays for Testing
+        int[] zeroLengthArray = {};
+        int[] singleItemArray = {42};
+        int[] negativeArray = {-15, -10, -5, 0, 5, 10};
+        int[] duplicateArray = {4, 4, 4, 4, 4, 4, 4};
 
-        System.out.println("Execution Times (milliseconds):");
+        int[] bigArray = createRandomSortedArray(1000, 500);
 
-        // --- 5 Best Case ---
-        System.out.println("Best Case 1: " + MeasureExecutionTime(largeArray, largeArray[500]));
-        System.out.println("Best Case 2: " + MeasureExecutionTime(Arrays.copyOfRange(largeArray, 0, 500), 250));
-        System.out.println("Best Case 3: " + MeasureExecutionTime(Arrays.copyOfRange(largeArray, 0, 200), 100));
-        System.out.println("Best Case 4: " + MeasureExecutionTime(Arrays.copyOfRange(largeArray, 0, 50), 25));
-        System.out.println("Best Case 5: " + MeasureExecutionTime(Arrays.copyOfRange(largeArray, 0, 10), 5));
+        System.out.println("Execution Time Results (milliseconds):\n");
 
-        // --- 5 Worst Case ---
-        System.out.println("Worst Case 1: " + MeasureExecutionTime(largeArray, -9999)); // Not present
-        System.out.println("Worst Case 2: " + MeasureExecutionTime(Arrays.copyOfRange(largeArray, 0, 500), 10000));
-        System.out.println("Worst Case 3: " + MeasureExecutionTime(Arrays.copyOfRange(largeArray, 0, 200), -10));
-        System.out.println("Worst Case 4: " + MeasureExecutionTime(Arrays.copyOfRange(largeArray, 0, 50), 999));
-        System.out.println("Worst Case 5: " + MeasureExecutionTime(Arrays.copyOfRange(largeArray, 0, 10), 1111));
+        // Best Case Scenarios
+        System.out.println("Best Case 1: " + getExecutionDuration(bigArray, bigArray[bigArray.length / 2]));
+        System.out.println("Best Case 2: " + getExecutionDuration(createRandomSortedArray(500, 200), 100));
+        System.out.println("Best Case 3: " + getExecutionDuration(createRandomSortedArray(200, 100), 50));
+        System.out.println("Best Case 4: " + getExecutionDuration(createRandomSortedArray(50, 25), 10));
+        System.out.println("Best Case 5: " + getExecutionDuration(createRandomSortedArray(10, 5), 2));
 
-        // --- 5 Average Case ---
-        System.out.println("Average Case 1: " + MeasureExecutionTime(largeArray, 700));
-        System.out.println("Average Case 2: " + MeasureExecutionTime(Arrays.copyOfRange(largeArray, 0, 500), 350));
-        System.out.println("Average Case 3: " + MeasureExecutionTime(Arrays.copyOfRange(largeArray, 0, 200), 120));
-        System.out.println("Average Case 4: " + MeasureExecutionTime(Arrays.copyOfRange(largeArray, 0, 50), 40));
-        System.out.println("Average Case 5: " + MeasureExecutionTime(Arrays.copyOfRange(largeArray, 0, 10), 7));
+        // Worst Case Scenarios
+        System.out.println("Worst Case 1: " + getExecutionDuration(bigArray, 99999));
+        System.out.println("Worst Case 2: " + getExecutionDuration(createRandomSortedArray(500, 200), -999));
+        System.out.println("Worst Case 3: " + getExecutionDuration(createRandomSortedArray(200, 100), 8888));
+        System.out.println("Worst Case 4: " + getExecutionDuration(createRandomSortedArray(50, 25), -5000));
+        System.out.println("Worst Case 5: " + getExecutionDuration(createRandomSortedArray(10, 5), 300));
 
-        // --- Edge Cases ---
-        System.out.println("Empty Array: " + MeasureExecutionTime(emptyArray, 10));
-        System.out.println("Single Element Found: " + MeasureExecutionTime(singleElement, 5));
-        System.out.println("Single Element Not Found: " + MeasureExecutionTime(singleElement, 10));
-        System.out.println("Negative Values: " + MeasureExecutionTime(negativeValues, -3));
-        System.out.println("Duplicates Found: " + MeasureExecutionTime(duplicates, 1));
+        // Average Case Scenarios
+        System.out.println("Average Case 1: " + getExecutionDuration(bigArray, bigArray[700]));
+        System.out.println("Average Case 2: " + getExecutionDuration(createRandomSortedArray(500, 200), 120));
+        System.out.println("Average Case 3: " + getExecutionDuration(createRandomSortedArray(200, 100), 60));
+        System.out.println("Average Case 4: " + getExecutionDuration(createRandomSortedArray(50, 25), 15));
+        System.out.println("Average Case 5: " + getExecutionDuration(createRandomSortedArray(10, 5), 1));
+
+        // Edge Cases
+        System.out.println("Empty Array: " + getExecutionDuration(zeroLengthArray, 7));
+        System.out.println("Single Element Found: " + getExecutionDuration(singleItemArray, 42));
+        System.out.println("Single Element Not Found: " + getExecutionDuration(singleItemArray, 99));
+        System.out.println("Negative Values: " + getExecutionDuration(negativeArray, -10));
+        System.out.println("Duplicates Found: " + getExecutionDuration(duplicateArray, 4));
     }
 }
