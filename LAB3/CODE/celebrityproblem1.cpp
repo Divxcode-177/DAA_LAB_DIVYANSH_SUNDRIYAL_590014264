@@ -16,7 +16,7 @@ int celebrityproblemfunction(int arr[2][2], int n) {
 
         if(arr[a][b] == 1) 
             s.push(b);
-        else               
+        else
             s.push(a);
     }
 
