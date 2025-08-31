@@ -3,7 +3,6 @@ public class MergeSortCode{
     static void Merging(int arr[], int start, int middle, int end) {
         int n1 = middle - start + 1;
         int n2 = end - middle;
-s
         int left[] = new int[n1];
         int right[] = new int[n2];
 
